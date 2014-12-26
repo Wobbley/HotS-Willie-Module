@@ -27,9 +27,11 @@ def show_commands(bot, trigger):
 
     bot.msg(ircname, underline('!rotation') + ' - Prints the name of the current free heroes')
 
+    bot.msg(ircname, underline('!mumble') + ' - Prints server info and a direct link to the Reddit Mumble server')
+
     bot.msg(ircname, underline('!rating <BattleTag>') + ' - Replies with a list of players with the given BattleTag from HotsLogs')
 
-    bot.msg(ircname, underline('!addBT <BattleTag>') + ' - Saves the entered BattleTag for the user.')
+    bot.msg(ircname, underline('!addBT <BattleTag> <region>') + ' - Saves the entered BattleTag for the user.')
 
     bot.msg(ircname, underline('!getBT <IRC name>') + ' - Print the BattleTag for the entered name')
 
@@ -41,9 +43,12 @@ def tips(bot, trigger):
     """
     Links the tips section of the HotS GitHub.io page to the username referenced
     """
-    user = trigger.group(2)
+    user = trigger.group(2).replace(" ", "")
     url = 'http://heroesofthestorm.github.io/tips'
-    bot.say("You can find some great tips here, {0}: {1}".format(user, url))
+    if not user:
+        bot.say("Tips can be found here: {0}".format(url))
+    else:
+        bot.say("You can find some great tips here, {0}: {1}".format(user, url))
 
 
 @commands('tierlist', 'tl')
@@ -65,7 +70,7 @@ def hotslogs_rating(bot, trigger):
     """
     if not trigger.group(2):
         return
-    player_name = trigger.group(2)
+    player_name = trigger.group(2).replace(" ", "")
     soup = BeautifulSoup(requests.get("https://www.hotslogs.com/PlayerSearch?Name="+player_name).text)
     players_table = soup.find('tbody')
     if not players_table:
@@ -80,8 +85,19 @@ def hotslogs_rating(bot, trigger):
         bot.say("{name} [{region}] - {league} [{mmr}]".format(name=nameCell.string, region=region.string, league=league.string, mmr=mmr.string))
 
 
+@commands('mumble')
+@example('!mumble')
+def mumble_info(bot, trigger):
+    """
+
+    :param bot:
+    :param trigger:
+    """
+    bot.say("[Reddit Mumble]  Host:hotsreddit.no-ip.org  Port:7000  URL:mumble://hotsreddit.no-ip.org:7000/")
+
+
 @commands('addBattleTag', 'addBT')
-@example('!addBattleTag Wobbley#2327')
+@example('!addBattleTag Wobbley#2372 EU')
 def assign_bnet(bot, trigger):
     """
     Saves the entered BattleTag for the invoking user. A PM is sent to the user with an error message or confirmation
@@ -89,11 +105,18 @@ def assign_bnet(bot, trigger):
     :param trigger: Expected to contain a BattleTag in trigger.group(2)
     """
     user = trigger.nick
-    nick = trigger.group(2)
-    if not nick:
-        bot.reply('A BattleTag is required, example: "!addBT Wobbley#2372"')
+    nick = trigger.group(3)
+    region = trigger.group(4)
+    if trigger.group(5) is not None:
+        bot.msg(user, '[BattleTag]: Wrong format, expected: "!addBt Wobbley#2372 EU"')
+    if not nick or "#" not in nick:
+        bot.msg(user, '[BattleTag]: A BattleTag is required, example: "!addBT ' + bold('Wobbley#2372') + ' EU"')
         return
-    message = create_BattleTag(user, nick)
+    if not region or len(region) != 2:
+        bot.msg(user, '[BattleTag]: A region is required, example: "!addBT Wobbley#2372' + bold(' EU') + '"')
+        return
+    region_nick = '[{0}]{1}'.format(region, nick)
+    message = create_BattleTag(user, region_nick)
     bot.msg(user, message)
 
 
@@ -110,9 +133,12 @@ def get_bnet(bot, trigger):
         return
     data = select_BattleTag(nick)
     if not data:
-        bot.say("No BattleTag found for {0} ".format(nick))
+        bot.reply("No BattleTag found for {0} ".format(nick))
     else:
-        bot.say("IRC: " + data[0] + " Battle.net: " + data[1])
+        if data[0].endswith('s'):
+            bot.reply("{0}' BattleTag is {1}".format(data[0], data[1]))
+        else:
+            bot.reply("{0}'s BattleTag is {1}".format(data[0], data[1]))
 
 
 @commands('removeBattleTag', 'removeBT')
@@ -123,7 +149,7 @@ def remove_bnet(bot, trigger):
     """
     nick = trigger.nick
     delete_BattleTag(nick)
-    bot.msg(nick, "Removed your BattleTag")
+    bot.msg(nick, "[BattleTag]: Removed")
 
 
 @commands('rotation')
@@ -168,9 +194,12 @@ def create_BattleTag(irc_username, battleTag):
         c.execute('INSERT INTO BattleTag VALUES (?,?)', (irc_username, battleTag,))
         dbz.commit()
         dbz.close()
-        return "BattleTag added"
+        return "[BattleTag]: Added"
     else:
-        return "You already have a BattleTag, remove it first"
+        c.execute('UPDATE BattleTag SET bnet=? WHERE irc=?', (battleTag, irc_username,))
+        dbz.commit()
+        dbz.close()
+        return "[BattleTag]: Replaced {0} with {1}".format(data[1], battleTag)
 
 
 # noinspection PyPep8Naming
