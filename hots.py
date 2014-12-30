@@ -3,10 +3,10 @@ import re
 import sqlite3 as lite
 from bs4 import BeautifulSoup
 from willie.module import commands, example
-from willie.formatting import underline, bold
+from willie.formatting import underline
 
 filename = 'C:\\Users\\deanl\\.willie\\default.db'
-
+#filename = '/home/ubuntu/.willie/default.db'
 
 def set_up_db():
     willie_database = lite.connect(filename)
@@ -14,6 +14,7 @@ def set_up_db():
     c.execute('CREATE TABLE IF NOT EXISTS BattleTag (irc text, bnet text)')
     willie_database.commit()
     willie_database.close()
+
 
 @commands('commands')
 def show_commands(bot, trigger):
@@ -29,13 +30,15 @@ def show_commands(bot, trigger):
 
     bot.msg(ircname, underline('!mumble') + ' - Prints server info and a direct link to the Reddit Mumble server')
 
-    bot.msg(ircname, underline('!rating <BattleTag>') + ' - Replies with a list of players with the given BattleTag from HotsLogs')
+    bot.msg(ircname, underline('!rating <BattleTag>') + ' - Replies with a list of players with the given '
+                                                        'BattleTag from HotsLogs')
 
     bot.msg(ircname, underline('!addBT <BattleTag> <region>') + ' - Saves the entered BattleTag for the user.')
 
     bot.msg(ircname, underline('!getBT <IRC name>') + ' - Print the BattleTag for the entered name')
 
     bot.msg(ircname, underline('!removeBT') + ' - Removes the entered battletag for the user')
+
 
 @commands('tips')
 @example('!tips Wobbley')
@@ -78,11 +81,12 @@ def hotslogs_rating(bot, trigger):
         return
     players = players_table.find_all('tr')
     for player in players:
-        nameCell = player.find('td', text=re.compile(player_name, re.IGNORECASE))
-        region = nameCell.previous_sibling
-        league = nameCell.next_sibling
+        name_cell = player.find('td', text=re.compile(player_name, re.IGNORECASE))
+        region = name_cell.previous_sibling
+        league = name_cell.next_sibling
         mmr = league.next_sibling
-        bot.say("{name} [{region}] - {league} [{mmr}]".format(name=nameCell.string, region=region.string, league=league.string, mmr=mmr.string))
+        bot.say("{name} [{region}] - {league} [{mmr}]"
+                .format(name=name_cell.string, region=region.string, league=league.string, mmr=mmr.string))
 
 
 @commands('mumble')
@@ -105,16 +109,12 @@ def assign_bnet(bot, trigger):
     :param trigger: Expected to contain a BattleTag in trigger.group(2)
     """
     user = trigger.nick
+    pattern = re.compile('^[a-zA-Z]+[#]\d{4}\s[a-zA-Z]{2}$')
+    if not pattern.match(trigger.group(2)):
+        bot.msg(user, '[BattleTag]: Wrong format, an example of the correct format: "!addBT Wobbley#2372 EU"')
+        return
     nick = trigger.group(3)
-    region = trigger.group(4)
-    if trigger.group(5) is not None:
-        bot.msg(user, '[BattleTag]: Wrong format, expected: "!addBt Wobbley#2372 EU"')
-    if not nick or "#" not in nick:
-        bot.msg(user, '[BattleTag]: A BattleTag is required, example: "!addBT ' + bold('Wobbley#2372') + ' EU"')
-        return
-    if not region or len(region) != 2:
-        bot.msg(user, '[BattleTag]: A region is required, example: "!addBT Wobbley#2372' + bold(' EU') + '"')
-        return
+    region = trigger.group(4).upper()
     region_nick = '[{0}]{1}'.format(region, nick)
     message = create_BattleTag(user, region_nick)
     bot.msg(user, message)
