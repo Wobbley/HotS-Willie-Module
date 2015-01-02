@@ -9,6 +9,7 @@ from willie.formatting import underline
 parameters = yaml.load(open('parameters.yml', 'r'))
 
 filename = parameters['database_file']
+bot_commands = parameters['commands']
 
 def set_up_db():
     willie_database = lite.connect(filename)
@@ -17,6 +18,12 @@ def set_up_db():
     willie_database.commit()
     willie_database.close()
 
+def get_command_help_message(command):
+    message = underline(bot_commands[command]['example'])
+    if 'alias' in command:
+        message += ' — alias !' + bot_commands[command]['alias']
+    message += ' — ' + bot_commands[command]['help']
+    return message
 
 @commands('commands')
 def show_commands(bot, trigger):
@@ -24,23 +31,9 @@ def show_commands(bot, trigger):
 
     bot.msg(ircname, "Here's a list of my commands:")
 
-    bot.msg(ircname, underline('!tips <IRC name>') + ' - Links the tips section and highlights user')
-
-    bot.msg(ircname, underline('!tierlist, !tl') + ' - Replies with the url for the Zuna and iDream tierlist ')
-
-    bot.msg(ircname, underline('!rotation') + ' - Prints the name of the current free heroes')
-
-    bot.msg(ircname, underline('!mumble') + ' - Prints server info and a direct link to the Reddit Mumble server')
-
-    bot.msg(ircname, underline('!rating <BattleTag>') + ' - Replies with a list of players with the given '
-                                                        'BattleTag from HotsLogs')
-
-    bot.msg(ircname, underline('!addBT <BattleTag> <region>') + ' - Saves the entered BattleTag for the user.')
-
-    bot.msg(ircname, underline('!getBT <IRC name>') + ' - Print the BattleTag for the entered name')
-
-    bot.msg(ircname, underline('!removeBT') + ' - Removes the entered battletag for the user')
-
+    for command, command_options in bot_commands.items():
+        message = get_command_help_message(command)
+        bot.msg(ircname, message)
 
 @commands('tips')
 @example('!tips Wobbley')

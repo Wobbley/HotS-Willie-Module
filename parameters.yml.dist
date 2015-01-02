@@ -1,2 +1,32 @@
 database_file:
   /path/to/default.db
+
+commands:
+  tips:
+    example: "!tips <IRC name>"
+    help: Links the tips section and highlights user
+  tierlist:
+    alias: tl
+    example: "!tierlist"
+    help: Replies with the url for the Zuna and iDream tierlists
+  rotation:
+    example: "!rotation"
+    help: Prints the name of the current free heroes
+  mumble:
+    example: "!mumble"
+    help: Prints server info and a direct link to the Reddit Mumble server
+  rating:
+    example: "!rating <BattleTag>"
+    help: Replies with a list of players with the given BattleTag from HotsLogs
+  addBattleTag:
+    alias: addBT
+    example: "!addbt <BattleTag> <region>"
+    help: Saves the entered BattleTag for the user.
+  getBattleTag:
+    alias: getBT
+    example: "!getbt <IRC name>"
+    help: Print the BattleTag for the entered name
+  removeBattleTag:
+    alias: removeBT
+    example: "!removeBattleTag <IRC name>"
+    help: Removes the entered battletag for the user
