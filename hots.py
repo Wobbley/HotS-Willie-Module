@@ -1,12 +1,14 @@
 import requests
 import re
 import sqlite3 as lite
+import yaml
 from bs4 import BeautifulSoup
 from willie.module import commands, example
 from willie.formatting import underline
 
-filename = 'C:\\Users\\deanl\\.willie\\default.db'
-#filename = '/home/ubuntu/.willie/default.db'
+parameters = yaml.load(open('parameters.yml', 'r'))
+
+filename = parameters['database_file']
 
 def set_up_db():
     willie_database = lite.connect(filename)
