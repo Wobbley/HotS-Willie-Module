@@ -20,7 +20,7 @@ def set_up_db():
 
 def get_command_help_message(command):
     message = underline(bot_commands[command]['example'])
-    if 'alias' in command:
+    if 'alias' in bot_commands[command]:
         message += ' — alias !' + bot_commands[command]['alias']
     message += ' — ' + bot_commands[command]['help']
     return message
