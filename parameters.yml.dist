@@ -19,14 +19,14 @@ commands:
     example: "!rating <BattleTag>"
     help: Replies with a list of players with the given BattleTag from HotsLogs
   addBattleTag:
-    alias: addBT
+    alias: addbt
     example: "!addbt <BattleTag> <region>"
     help: Saves the entered BattleTag for the user.
   getBattleTag:
-    alias: getBT
+    alias: getbt
     example: "!getbt <IRC name>"
     help: Print the BattleTag for the entered name
   removeBattleTag:
-    alias: removeBT
+    alias: removebt
     example: "!removeBattleTag <IRC name>"
     help: Removes the entered battletag for the user
