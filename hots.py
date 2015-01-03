@@ -86,7 +86,7 @@ def hotslogs_rating(bot, trigger):
         league = name_cell.next_sibling
         mmr = league.next_sibling
         bot.say("{name} [{region}] - {league} [{mmr}]"
-                .format(name=name_cell.string, region=region.string, league=league.string, mmr=mmr.string))
+                .format(name=name_cell.string, region=region.string, league=league.string, mmr=mmr.string), max_messages=7)
 
 
 @commands('mumble')
