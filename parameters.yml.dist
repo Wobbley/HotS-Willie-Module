@@ -30,3 +30,6 @@ commands:
     alias: removeBT
     example: "!removeBattleTag <IRC name>"
     help: Removes the entered battletag for the user
+  help:
+    example: "!help <command name>"
+    help: Display the help for the given command
