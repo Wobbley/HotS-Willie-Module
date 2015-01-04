@@ -157,6 +157,21 @@ def free_rotation(bot, trigger):
     rotation_list = free_rotation_list()
     bot.say("Free rotation: " + ', '.join(rotation_list))
 
+@commands('help')
+@example(bot_commands['help']['example'])
+def get_command_help(bot, trigger):
+    """
+    Prints help for the given command name
+    """
+    command = trigger.group(2)
+    if command in bot_commands:
+        bot.msg(trigger.nick, get_command_help_message(command))
+    else:
+        for command_name, command_options in bot_commands.items():
+            if 'alias' in command_options and command_options['alias'].lower() == command:
+                bot.msg(trigger.nick, get_command_help_message(command_name))
+                return
+    bot.msg(trigger.nick, 'I don\'t know this command')
 
 def free_rotation_list():
     """
