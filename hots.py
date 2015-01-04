@@ -93,6 +93,16 @@ def mumble_info(bot, trigger):
     :param trigger:
     """
     bot.say("[Reddit Mumble]  Host:hotsreddit.no-ip.org  Port:7000  URL:mumble://hotsreddit.no-ip.org:7000/")
+    
+@commands('ts3')
+@example('!ts3')
+def ts3_info(bot, trigger):
+    """
+
+    :param bot:
+    :param trigger:
+    """
+    bot.say("[Reddit Teamspeak] ts3.oda-h.com")
 
 
 @commands('addBattleTag', 'addBT')
