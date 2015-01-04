@@ -1,0 +1,4 @@
+requests==2.5.1
+beautifulsoup4==4.3.2
+willie==4.6.2
+PyYAML==3.11
