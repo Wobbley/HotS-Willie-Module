@@ -15,6 +15,9 @@ commands:
   mumble:
     example: "!mumble"
     help: Prints server info and a direct link to the Reddit Mumble server
+  ts3:
+    example: "!ts3"
+    help: Prints server info of the Reddit Teamspeak
   rating:
     example: "!rating <BattleTag>"
     help: Replies with a list of players with the given BattleTag from HotsLogs
