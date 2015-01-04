@@ -131,9 +131,9 @@ def get_bnet(bot, trigger):
         bot.reply("No BattleTag found for {0} ".format(nick))
     else:
         if data[0].endswith('s'):
-            bot.reply("{0}' BattleTag is {1}".format(data[0], data[1]))
+            bot.reply("{0}' BattleTag is {1} ".format(data[0], data[1]))
         else:
-            bot.reply("{0}'s BattleTag is {1}".format(data[0], data[1]))
+            bot.reply("{0}'s BattleTag is {1} ".format(data[0], data[1]))
 
 
 @commands('removeBattleTag', 'removeBT')
