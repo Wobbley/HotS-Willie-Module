@@ -132,7 +132,7 @@ def get_bnet(bot, trigger):
     Print the BattleTag entered for the given user, if no BattleTag exists it will return an error message.
     :param trigger: Expected to contain a IRC username in trigger.group(2)
     """
-    nick = trigger.group(2)
+    nick = trigger.group(2).replace(" ", "")
     if not nick:
         bot.reply('A irc username is required, example: "getBT Wobbley"')
         return
