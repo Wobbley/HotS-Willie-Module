@@ -1,5 +1,5 @@
 database_file:
-  /path/to/default.db
+  /path/to/hots.db
 
 commands:
   tips:
