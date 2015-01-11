@@ -11,6 +11,7 @@ parameters = yaml.load(open('parameters.yml', 'r'))
 filename = parameters['database_file']
 bot_commands = parameters['commands']
 
+
 def set_up_db():
     willie_database = lite.connect(filename)
     c = willie_database.cursor()
@@ -18,12 +19,21 @@ def set_up_db():
     willie_database.commit()
     willie_database.close()
 
+
 def get_command_help_message(command):
     message = underline(bot_commands[command]['example'])
     if 'alias' in bot_commands[command]:
         message += ' — alias !' + bot_commands[command]['alias']
     message += ' — ' + bot_commands[command]['help']
     return message
+
+
+@commands('auth')
+def auth_and_mask(bot, trigger):
+    if trigger.admin:
+        bot.write(['AUTH', 'Hotsbot', "BFiRC6eLE-"])
+        bot.write(['MODE', 'Hotsbot', "+x"])
+
 
 @commands('commands')
 def show_commands(bot, trigger):
@@ -34,6 +44,7 @@ def show_commands(bot, trigger):
     for command, command_options in bot_commands.items():
         message = get_command_help_message(command)
         bot.msg(ircname, message)
+
 
 @commands('tips')
 @example('!tips Wobbley')
