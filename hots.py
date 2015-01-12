@@ -79,6 +79,7 @@ def hotslogs_rating(bot, trigger):
     <playername> [<region>] - <division> [<mmr>]
     :param trigger: Expected to contain a player name in trigger.group(2)
     """
+    count = 0
     if not trigger.group(2):
         return
     player_name = trigger.group(2).replace(" ", "")
@@ -89,12 +90,14 @@ def hotslogs_rating(bot, trigger):
         return
     players = players_table.find_all('tr')
     for player in players:
-        name_cell = player.find('td', text=re.compile(player_name, re.IGNORECASE))
-        region = name_cell.previous_sibling
-        league = name_cell.next_sibling
-        mmr = league.next_sibling
-        bot.say("{name} [{region}] - {league} [{mmr}]"
-                .format(name=name_cell.string, region=region.string, league=league.string, mmr=mmr.string), max_messages=7)
+        if count < 5:
+            count += 1
+            name_cell = player.find('td', text=re.compile(player_name, re.IGNORECASE))
+            region = name_cell.previous_sibling
+            league = name_cell.next_sibling
+            mmr = league.next_sibling
+            bot.say("{name} [{region}] - {league} [{mmr}]"
+                    .format(name=name_cell.string, region=region.string, league=league.string, mmr=mmr.string))
 
 
 @commands('mumble')
@@ -145,11 +148,11 @@ def get_bnet(bot, trigger):
     Print the BattleTag entered for the given user, if no BattleTag exists it will return an error message.
     :param trigger: Expected to contain a IRC username in trigger.group(2)
     """
-    nick = trigger.group(2).replace(" ", "")
+    nick = trigger.group(2)
     if not nick:
         bot.reply('A irc username is required, example: "getBT Wobbley"')
         return
-    data = select_BattleTag(nick)
+    data = select_BattleTag(nick.replace(" ", ""))
     if not data:
         bot.reply("No BattleTag found for {0} ".format(nick))
     else:
