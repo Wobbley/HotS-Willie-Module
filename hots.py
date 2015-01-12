@@ -10,6 +10,7 @@ parameters = yaml.load(open('parameters.yml', 'r'))
 
 filename = parameters['database_file']
 bot_commands = parameters['commands']
+key = parameters['key']
 
 
 def set_up_db():
@@ -31,8 +32,8 @@ def get_command_help_message(command):
 @commands('auth')
 def auth_and_mask(bot, trigger):
     if trigger.admin:
-        bot.write(['AUTH', 'Hotsbot', "BFiRC6eLE-"])
-        bot.write(['MODE', 'Hotsbot', "+x"])
+        bot.write(['AUTH', bot.nick, key])
+        bot.write(['MODE', bot.nick, "+x"])
 
 
 @commands('commands')

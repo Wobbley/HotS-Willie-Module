@@ -1,6 +1,9 @@
 database_file:
   /path/to/default.db
 
+key:
+  Key used to auth with server
+
 commands:
   tips:
     example: "!tips <IRC name>"
