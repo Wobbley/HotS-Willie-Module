@@ -2,11 +2,12 @@ import requests
 import re
 import sqlite3 as lite
 import yaml
+import os
 from bs4 import BeautifulSoup
 from willie.module import commands, example
 from willie.formatting import underline
 
-parameters = yaml.load(open('parameters.yml', 'r'))
+parameters = yaml.load(open(os.path.expanduser('~') + '/.willie/hots_parameters.yml', 'r'))
 
 filename = parameters['database_file']
 bot_commands = parameters['commands']
