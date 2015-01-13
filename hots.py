@@ -207,8 +207,8 @@ def free_rotation_list():
     soup = BeautifulSoup(requests.get("http://heroesofthestorm.github.io/free-hero-rotation").text)
     free_hero_elements = soup.select("button.btn.dropdown-toggle")
     rotation_list = []
+    hero_name_regex = '<button.+>(.+)</button>'
     for hero_element in free_hero_elements:
-        hero_name_regex = '<button.+>(.+)</button>'
         if re.match(hero_name_regex, str(hero_element)):
             hero_name = re.search(hero_name_regex, str(hero_element)).group(1)
             hero_name = hero_name.replace("-", " ").title()
