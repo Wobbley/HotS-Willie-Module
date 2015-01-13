@@ -109,7 +109,7 @@ def mumble_info(bot, trigger):
     :param trigger:
     """
     bot.say("[Reddit Mumble]  Host:hotsreddit.no-ip.org  Port:7000  URL:mumble://hotsreddit.no-ip.org:7000/")
-    
+
 @commands('ts3')
 @example('!ts3')
 def ts3_info(bot, trigger):
@@ -178,7 +178,7 @@ def remove_bnet(bot, trigger):
 def free_rotation(bot, trigger):
     """
     Prints the name of the current free heroes as a comma separated list.
-    Datasource: www.heroesfire.com
+    Datasource: http://heroesofthestorm.github.io/free-hero-rotation
     """
     rotation_list = free_rotation_list()
     bot.say("Free rotation: " + ', '.join(rotation_list))
@@ -204,13 +204,15 @@ def free_rotation_list():
     Scrapes the name of the current free heroes from www.heroesfire.com, and returns it as a list object.
     :return: A list object with hero names
     """
-    soup = BeautifulSoup(requests.get("http://www.heroesfire.com/").text)
-    free_hero_divs = soup.find_all("div", class_="hero free")
+    soup = BeautifulSoup(requests.get("http://heroesofthestorm.github.io/free-hero-rotation").text)
+    free_hero_elements = soup.select("button.btn.dropdown-toggle")
     rotation_list = []
-    for heroDiv in free_hero_divs:
-        hero_name = re.search('/hots/wiki/heroes/(.+)">', str(heroDiv)).group(1)
-        hero_name = hero_name.replace("-", " ").title()
-        rotation_list.append(hero_name)
+    for hero_element in free_hero_elements:
+        hero_name_regex = '<button.+>(.+)</button>'
+        if re.match(hero_name_regex, str(hero_element)):
+            hero_name = re.search(hero_name_regex, str(hero_element)).group(1)
+            hero_name = hero_name.replace("-", " ").title()
+            rotation_list.append(hero_name)
     return rotation_list
 
 
