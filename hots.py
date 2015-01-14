@@ -83,7 +83,7 @@ def hotslogs_rating(bot, trigger):
     if not trigger.group(2):
         return
     player_name = trigger.group(2).replace(" ", "")
-    soup = BeautifulSoup(requests.get("https://www.hotslogs.com/PlayerSearch?Name="+player_name).text)
+    soup = BeautifulSoup(requests.get("https://www.hotslogs.com/PlayerSearch?NoRedirect=1&Name="+player_name).text)
     players_table = soup.find('tbody')
     if not players_table:
         bot.say("Unable to find any rating for player " + player_name)
