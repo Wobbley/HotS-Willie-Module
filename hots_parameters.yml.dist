@@ -39,3 +39,6 @@ commands:
   help:
     example: "!help <command name>"
     help: Display the help for the given command
+  bug:
+    example: "!bug"
+    help: "Print bug tracker URL"
