@@ -181,7 +181,10 @@ def free_rotation(bot, trigger):
     Datasource: http://heroesofthestorm.github.io/free-hero-rotation
     """
     rotation_list = free_rotation_list()
-    bot.say("Free rotation: " + ', '.join(rotation_list))
+    if rotation_list:
+        bot.say("Free rotation: " + ', '.join(rotation_list))
+    else:
+        bot.say("Free rotation list: http://heroesofthestorm.github.io/free-hero-rotation")
 
 @commands('help')
 @example(bot_commands['help']['example'])
