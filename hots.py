@@ -190,13 +190,20 @@ def get_command_help(bot, trigger):
     Prints help for the given command name
     """
     command = trigger.group(2)
+
+    if not command:
+        bot.msg(trigger.nick, "Hey " + trigger.nick + "! Check out my !commands to see what I can do")
+        return
+
     if command in bot_commands:
         bot.msg(trigger.nick, get_command_help_message(command))
+        return
     else:
         for command_name, command_options in bot_commands.items():
             if 'alias' in command_options and command_options['alias'].lower() == command:
                 bot.msg(trigger.nick, get_command_help_message(command_name))
                 return
+
     bot.msg(trigger.nick, 'I don\'t know this command')
 
 def free_rotation_list():
