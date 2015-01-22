@@ -54,11 +54,11 @@ def tips(bot, trigger):
     """
     Links the tips section of the HotS GitHub.io page to the username referenced
     """
-    user = trigger.group(2).replace(" ", "")
     url = 'http://heroesofthestorm.github.io/tips'
-    if not user:
+    if not trigger.group(2):
         bot.say("Tips can be found here: {0}".format(url))
     else:
+        user = trigger.group(2).replace(" ", "")
         bot.say("You can find some great tips here, {0}: {1}".format(user, url))
 
 
