@@ -199,6 +199,15 @@ def get_command_help(bot, trigger):
                 return
     bot.msg(trigger.nick, 'I don\'t know this command')
 
+@commands('bug')
+@example(bot_commands['bug']['example'])
+def report_bug(bot, trigger):
+    """
+    Print bug tracker URL
+    """
+    url = "https://github.com/Wobbley/HotS-Willie-Module/issues/new"
+    bot.say("You can submit a bug here: " + url)
+
 def free_rotation_list():
     """
     Scrapes the name of the current free heroes from www.heroesfire.com, and returns it as a list object.
