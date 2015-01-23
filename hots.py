@@ -181,7 +181,10 @@ def free_rotation(bot, trigger):
     Datasource: http://heroesofthestorm.github.io/free-hero-rotation
     """
     rotation_list = free_rotation_list()
-    bot.say("Free rotation: " + ', '.join(rotation_list))
+    if rotation_list:
+        bot.say("Free rotation: " + ', '.join(rotation_list))
+    else:
+        bot.say("Free rotation list: http://heroesofthestorm.github.io/free-hero-rotation")
 
 @commands('help')
 @example(bot_commands['help']['example'])
@@ -221,7 +224,7 @@ def free_rotation_list():
     :return: A list object with hero names
     """
     soup = BeautifulSoup(requests.get("http://heroesofthestorm.github.io/free-hero-rotation").text)
-    free_hero_elements = soup.select("button.btn.dropdown-toggle")
+    free_hero_elements = soup.select("button.btn")
     rotation_list = []
     hero_name_regex = '<button.+>(.+)</button>'
     for hero_element in free_hero_elements:
