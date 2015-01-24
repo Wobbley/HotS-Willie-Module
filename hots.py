@@ -189,6 +189,7 @@ def free_rotation(bot, trigger):
     else:
         bot.say("Free rotation list: http://heroesofthestorm.github.io/free-hero-rotation")
 
+
 @commands('help')
 @example(bot_commands['help']['example'])
 def get_command_help(bot, trigger):
@@ -212,7 +213,9 @@ def get_command_help(bot, trigger):
 
     bot.msg(trigger.nick, 'I don\'t know this command')
 
+
 @commands('bug')
+@example(bot_commands['bug']['example'])
 def report_bug(bot, trigger):
     """
     Print bug tracker URL
