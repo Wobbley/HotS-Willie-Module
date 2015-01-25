@@ -91,16 +91,16 @@ def hotslogs_rating(bot, trigger):
     players = players_table.find_all('tr')
     for player in players:
         if count < 5:
-            count += 1
             name_cell = player.find('td', text=re.compile(player_name, re.IGNORECASE))
             region = name_cell.previous_sibling
             league = name_cell.next_sibling
             mmr = league.next_sibling
             bot.say("{name} [{region}] - {league} [{mmr}]"
                     .format(name=name_cell.string, region=region.string, league=league.string, mmr=mmr.string))
-        if count == 5:
-            bot.msg(trigger.nick, 'Here\'s the full list of " +player_name" '
-                                  'https://www.hotslogs.com/PlayerSearch?NoRedirect=1&Name='+player_name)
+        count += 1
+    if count > 5:
+        bot.msg(trigger.nick, 'Here\'s the full list of ' + player_name +
+                              'https://www.hotslogs.com/PlayerSearch?NoRedirect=1&Name='+player_name)
 
 
 @commands('mumble')
