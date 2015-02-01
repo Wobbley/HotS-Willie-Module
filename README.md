@@ -16,6 +16,7 @@ A module for Willie The IRC Bot to be used on the #heroesofthestorm channel on q
 * Run `pip install -r requirements.txt`
 * Edit things
 * Test by running willie:
+  * `cp default.cfg.dist $HOME/.willie/default.cfg` and edit the path to the database file
   * `cp hots_parameters.yml.dist $HOME/.willie/hots_parameters.yml` and edit the path to the database file 
   * Configure your local willie (in `~/.willie`)
   * `ln -s $(pwd)/hots.py ~/.willie/modules/`

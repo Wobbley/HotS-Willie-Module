@@ -1,0 +1,18 @@
+[core]
+nick = HotSBot
+host = irc.quakenet.org
+port = 6667
+owner = Wobbley
+channels = #WobbleyTestChannel,#Heroesofthestorm
+enable = admin,adminchannel,announce,find_updates,isup,lmgtfy,reload,hots,units,uptime
+user = Hotsbot
+name = Willie HotsBot, http://willie.dftba.net
+prefix = \!
+admins =
+timeout = 120
+verify_ssl = True
+use_ssl = False
+
+[admin]
+hold_ground = True
+
