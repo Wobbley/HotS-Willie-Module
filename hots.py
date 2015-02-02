@@ -113,7 +113,7 @@ def mumble_info(bot, trigger):
     """
     bot.say("[Reddit Mumble]  Host:hotsreddit.no-ip.org  Port:7000  URL:mumble://hotsreddit.no-ip.org:7000/")
 
-@commands('ts3')
+@commands('ts3', 'ts')
 @example('!ts3')
 def ts3_info(bot, trigger):
     """
