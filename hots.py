@@ -133,7 +133,7 @@ def assign_bnet(bot, trigger):
     user = trigger.nick
 
     if not trigger.group(2):
-        bot.msg(user, 'Here is you can use the !addbt command: ' + bot_commands['addBattleTag']['example'])
+        bot.msg(user, 'Here is how you can use the !addbt command: ' + bot_commands['addBattleTag']['example'])
         return
 
     pattern = re.compile('^[a-zA-Z0-9]+[#]\d{4,5}\s[a-zA-Z]{2}$')
