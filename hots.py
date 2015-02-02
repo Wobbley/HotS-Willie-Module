@@ -235,11 +235,14 @@ def free_rotation_list():
     free_hero_elements = soup.select("button.btn")
     rotation_list = []
     hero_name_regex = '<button.+>(.+)</button>'
+    rotation_limit = 7
     for hero_element in free_hero_elements:
         if re.match(hero_name_regex, str(hero_element)):
             hero_name = re.search(hero_name_regex, str(hero_element)).group(1)
             hero_name = hero_name.replace("-", " ").title()
             rotation_list.append(hero_name)
+            if len(rotation_list) >= rotation_limit:
+                break
     return rotation_list
 
 
