@@ -131,6 +131,11 @@ def assign_bnet(bot, trigger):
     :param trigger: Expected to contain a BattleTag in trigger.group(2)
     """
     user = trigger.nick
+
+    if not trigger.group(2):
+        bot.msg(user, 'Here is you can use the !addbt command: ' + bot_commands['addBattleTag']['example'])
+        return
+
     pattern = re.compile('^[a-zA-Z0-9]+[#]\d{4}\s[a-zA-Z]{2}$')
     if not pattern.match(trigger.group(2)):
         bot.msg(user, '[BattleTag]: Wrong format, an example of the correct format: "!addBT Wobbley#2372 EU"')
