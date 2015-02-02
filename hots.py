@@ -136,7 +136,7 @@ def assign_bnet(bot, trigger):
         bot.msg(user, 'Here is you can use the !addbt command: ' + bot_commands['addBattleTag']['example'])
         return
 
-    pattern = re.compile('^[a-zA-Z0-9]+[#]\d{4}\s[a-zA-Z]{2}$')
+    pattern = re.compile('^[a-zA-Z0-9]+[#]\d{4,5}\s[a-zA-Z]{2}$')
     if not pattern.match(trigger.group(2)):
         bot.msg(user, '[BattleTag]: Wrong format, an example of the correct format: "!addBT Wobbley#2372 EU"')
         return
