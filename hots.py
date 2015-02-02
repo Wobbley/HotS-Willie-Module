@@ -4,7 +4,7 @@ import sqlite3 as lite
 import yaml
 import os
 from bs4 import BeautifulSoup
-from willie.module import commands, example
+from willie.module import commands, example, event, rule, thread, unblockable
 from willie.formatting import underline
 
 parameters = yaml.load(open(os.path.expanduser('~') + '/.willie/hots_parameters.yml', 'r'))
@@ -29,13 +29,13 @@ def get_command_help_message(command):
     message += ' — ' + bot_commands[command]['help']
     return message
 
-
-@commands('auth')
-def auth_and_mask(bot, trigger):
-    if trigger.admin:
-        bot.write(['AUTH', bot.nick, key])
-        bot.write(['MODE', bot.nick, "+x"])
-
+@event('001')
+@rule('.*')
+@thread(False)
+@unblockable
+def startup(bot, trigger):
+    bot.write(['AUTH', bot.nick, key])
+    bot.write(['MODE', bot.nick, "+x"])
 
 @commands('commands')
 def show_commands(bot, trigger):
