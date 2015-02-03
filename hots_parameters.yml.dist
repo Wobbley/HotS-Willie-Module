@@ -4,6 +4,9 @@ database_file:
 key:
   Key used to auth with server
 
+http_server:
+  port: 1234
+
 commands:
   tips:
     example: "!tips <IRC name>"

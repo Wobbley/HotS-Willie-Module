@@ -4,8 +4,10 @@ import sqlite3 as lite
 import yaml
 import os
 from bs4 import BeautifulSoup
-from willie.module import commands, example, event, rule
+from willie.module import commands, example, event, rule, interval
 from willie.formatting import underline
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from multiprocessing import Process, Queue
 
 parameters = yaml.load(open(os.path.expanduser('~') + '/.willie/hots_parameters.yml', 'r'))
 
@@ -28,6 +30,33 @@ def get_command_help_message(command):
         message += ' — alias !' + bot_commands[command]['alias']
     message += ' — ' + bot_commands[command]['help']
     return message
+
+message_queue = Queue()
+
+class WebhookHandler(BaseHTTPRequestHandler):
+    def do_POST(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+        message_queue.put('I\'m being updated, brb!')
+
+def serve_forever(server):
+    server.serve_forever()
+
+def setup(bot):
+    server = HTTPServer(("", parameters['http_server']['port']), WebhookHandler)
+    Process(target=serve_forever, args=(server,)).start()
+
+@interval(5)
+def poll_queue(bot):
+    while True:
+        try:
+            message = message_queue.get()
+            for channel in bot.config.core.channels:
+                bot.msg(channel, message)
+        except Exception as e:
+            print(e)
+            break
 
 @event('001')
 @rule('.*')
