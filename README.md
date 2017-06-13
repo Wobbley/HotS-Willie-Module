@@ -1,3 +1,5 @@
+PROJECT IS NO LONGER MAINTAINED A.K.A DEAD
+
 HotS-Willie-Module
 ==================
 
