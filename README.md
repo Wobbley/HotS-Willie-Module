@@ -5,6 +5,8 @@ HotS-Willie-Module
 
 A module for Willie The IRC Bot to be used on the #heroesofthestorm channel on quakenet, this is also my first real go at Python. I never intended to share the code, but someone somewhere might find it useful. Therefore the code will be ugly as hell and I might or might not refactor :)
 
+#####Development has stopped on this version, the bot has been ported to Ruby because the framework is better and testing is easier. It can be found here: https://github.com/chadrien/hots-irc-bot
+
 ## Running
 
 * Install [Willie](http://willie.dftba.net/) the python IRC bot

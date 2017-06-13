@@ -4,8 +4,10 @@ import sqlite3 as lite
 import yaml
 import os
 from bs4 import BeautifulSoup
-from willie.module import commands, example, event, rule
+from willie.module import commands, example, event, rule, interval
 from willie.formatting import underline
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from multiprocessing import Process, Queue
 
 parameters = yaml.load(open(os.path.expanduser('~') + '/.willie/hots_parameters.yml', 'r'))
 
@@ -28,6 +30,33 @@ def get_command_help_message(command):
         message += ' — alias !' + bot_commands[command]['alias']
     message += ' — ' + bot_commands[command]['help']
     return message
+
+message_queue = Queue()
+
+class WebhookHandler(BaseHTTPRequestHandler):
+    def do_POST(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+        message_queue.put('I\'m being updated, brb!')
+
+def serve_forever(server):
+    server.serve_forever()
+
+def setup(bot):
+    server = HTTPServer(("", parameters['http_server']['port']), WebhookHandler)
+    Process(target=serve_forever, args=(server,)).start()
+
+@interval(5)
+def poll_queue(bot):
+    while True:
+        try:
+            message = message_queue.get()
+            for channel in bot.config.core.channels:
+                bot.msg(channel, message)
+        except Exception as e:
+            print(e)
+            break
 
 @event('001')
 @rule('.*')
@@ -89,16 +118,17 @@ def hotslogs_rating(bot, trigger):
     players = players_table.find_all('tr')
     for player in players:
         if count < 5:
-            name_cell = player.find('td', text=re.compile(player_name, re.IGNORECASE))
-            region = name_cell.previous_sibling
-            league = name_cell.next_sibling
-            mmr = league.next_sibling
+            cells = player.findAll('td')
+            name_cell = cells[2]
+            region = cells[1]
+            league = cells[3]
+            mmr = cells[4]
             bot.say("{name} [{region}] - {league} [{mmr}]"
                     .format(name=name_cell.string, region=region.string, league=league.string, mmr=mmr.string))
         count += 1
     if count > 5:
         bot.msg(trigger.nick, 'Here\'s the full list of ' + player_name +
-                              'https://www.hotslogs.com/PlayerSearch?NoRedirect=1&Name='+player_name)
+                              ' https://www.hotslogs.com/PlayerSearch?NoRedirect=1&Name='+player_name)
 
 
 @commands('mumble')
